@@ -1,13 +1,13 @@
-#ifndef COMMANDPASER_H
-#define COMMANDPASER_H
+#ifndef COMMANDPARSER_H
+#define COMMANDPARSER_H
 
 #include <string>
 #include <sstream>
 #include <vector>
 #include <algorithm>
-#include "DataBase.h"
+#include "Database.h"
 
-class CommandPaser{
+class CommandParser{
 public:
     static void execute(Database& db,const std::string& input);
 

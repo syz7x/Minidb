@@ -1,19 +1,23 @@
 #include <iostream>
 #include <string>
+#include "Database.h"
+#include "CommandParser.h"
 
 int main(){
+    Database db;
     std::string input;
     
+    std::cout << "MiniDB - A simple in-memory database\n";
+    std::cout << "Enter SQL commands or .exit to quit:\n";
+
     while (true){
-    std::getline(std::cin , input);
-    if (input == ".exit"){
-        std::cout<<"Goodbye!\n";
-        break;
-    }else if (input == "hello"){
-        std::cout<<"Hello from the Minidb! This is your REPL working\n";
-    }else{
-        std::cout << "Unrecognized command: '" << input << "'\n";
-    }
-    }
+        std::cout<<"minidb>";
+        std::getline(std::cin,input);
+
+        if (input.empty()){
+            continue;
+        }
+        CommandParser::execute(db,input);
+}
     return 0;
 }
