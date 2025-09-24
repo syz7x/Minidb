@@ -13,6 +13,8 @@ void Table::insertRow(const Row& row){
             return;
         }
         rows.push_back(row);
+
+        saveToFile();
     }    
     
 void Table::display() const{
@@ -27,4 +29,39 @@ void Table::display() const{
             }
             std::cout<<std::endl;
         }
-    }    
+    }
+    
+void saveToFile(){
+    saveSchema();
+    saveData();
+}
+
+bool loadFromFile(){
+     return loadSchema() && loadData();
+}
+
+void saveSchema(){
+    std::ofstream schemaFile(name + ".schema");
+    if (!schemaFile){
+        std::cout<<"Error,can't create schame file for table"<<name<<std::endl;
+        return;
+    }
+
+    for (const auto& column : columns){
+        schemaFile<<column.name<<" "<<column.type<<"\n";
+    }
+    schemaFile.close();
+
+}
+
+void saveData(){
+
+}
+
+bool loadSchema(){
+
+}
+
+bool loadData(){
+
+}

@@ -1,5 +1,5 @@
-#include "DataBase.h"
-#include <iostream>
+#include "../include/minidb/Database.h"
+
 void Database::createTable(const std::string& name,
         const std::vector<std::pair<std::string,std::string>>& columns){
         Table newTable(name);
@@ -19,3 +19,18 @@ Table* Database::getTable(const std::string& name){
         }
         return &(it->second);
     }        
+
+
+void Database::loadAllTables(){
+    for (const auto& entry : std::filesystem::directory_iterator(".")){
+        if (entry.path().extension() == ".schema"){
+            std::string tableName = entry.path().stem().string();
+
+            Table newTable(tableName);
+            if (newTable.loadFromFile()){
+                tables[tableName] = newTable;
+                std::cout << "Loaded existing table: " << tableName << std::endl;
+            }
+        }
+    }
+}
