@@ -31,19 +31,19 @@ void Table::display() const{
         }
     }
     
-void saveToFile(){
+void Table::saveToFile(){
     saveSchema();
     saveData();
 }
 
-bool loadFromFile(){
+bool Table::loadFromFile(){
      return loadSchema() && loadData();
 }
-
-void saveSchema(){
+//保存表结构
+void Table::saveSchema(){
     std::ofstream schemaFile(name + ".schema");
     if (!schemaFile){
-        std::cout<<"Error,can't create schame file for table"<<name<<std::endl;
+        std::cerr<<"Error,can't create schame file for table"<<name<<std::endl;
         return;
     }
 
@@ -53,15 +53,69 @@ void saveSchema(){
     schemaFile.close();
 
 }
-
-void saveData(){
-
+//保存数据
+void Table::saveData(){
+    std::ofstream dataFile(name + ".data");
+    if (!dataFile){
+        std::cerr<<"Error,can't create data file for the table"<<name<<std::endl;
+        return;
+    }
+    for (const auto& row : rows) {
+            for (size_t i = 0; i < row.values.size(); ++i) {
+                dataFile << row.values[i];
+                if (i < row.values.size() - 1) {
+                    dataFile << ",";
+                }
+            }
+            dataFile << "\n";
+        }
+        dataFile.close();
 }
 
-bool loadSchema(){
+ bool Table::loadSchema() {
+        std::ifstream schemaFile(name + ".schema");
+        if (!schemaFile) {
+            // 文件不存在是正常的（新表）
+            return false;
+        }
 
-}
+        columns.clear();
+        std::string line;
+        while (std::getline(schemaFile, line)) {
+            size_t spacePos = line.find(' ');
+            if (spacePos != std::string::npos) {
+                std::string colName = line.substr(0, spacePos);
+                std::string colType = line.substr(spacePos + 1);
+                addColumn(colName, colType);
+            }
+        }
+        schemaFile.close();
+        return true;
+    }
 
-bool loadData(){
+    // 加载数据
+    bool Table::loadData() {
+        std::ifstream dataFile(name + ".data");
+        if (!dataFile) {
+            // 文件不存在是正常的（新表）
+            return false;
+        }
 
-}
+        rows.clear();
+        std::string line;
+        while (std::getline(dataFile, line)) {
+            Row newRow;
+            std::istringstream lineStream(line);
+            std::string value;
+            
+            while (std::getline(lineStream, value, ',')) {
+                newRow.addValue(value);
+            }
+            
+            if (newRow.values.size() == columns.size()) {
+                rows.push_back(newRow);
+            }
+        }
+        dataFile.close();
+        return true;
+    }

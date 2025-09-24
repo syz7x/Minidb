@@ -1,13 +1,12 @@
+#ifndef ROW_H
+#define ROW_H
+
 #include <string>
 #include <vector>
-#include <unordered_map>
-#include <iostream>
-
 class Row{
 public:
     std::vector<std::string> values;
 
-    void addValue(const std::string& value){
-        values.push_back(value);
-    }
+    void addValue(const std::string& value);
 };
+#endif

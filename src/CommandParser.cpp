@@ -1,4 +1,4 @@
-#include "CommandParser.h"
+#include "../include/minidb/CommandParser.h"
 #include <iostream>
 
 void CommandParser::execute(Database& db,
@@ -16,7 +16,7 @@ void CommandParser::execute(Database& db,
         parseInsertInto(db,iss);
     }
     else if (command == "select"){
-        parseSelection(db,iss);
+        parseSelect(db,iss);
     }
     else if (command == ".exit"){
         std::cout<<"Goodbye!\n";
@@ -33,15 +33,15 @@ void CommandParser::execute(Database& db,
 }
 
 
-void ComamandParser::parseCreateTable(Database& db,
+void CommandParser::parseCreateTable(Database& db,
     std::istringstream& iss){
         std::string tablekeyword;
         iss>>tablekeyword;
         std::transform(tablekeyword.begin(),tablekeyword.end(),tablekeyword.begin(),::tolower);
 
         if (tablekeyword == "table"){
-            std::string tablename;
-            iss>>tablename;
+            std::string tableName;
+            iss>>tableName;
             //读取列定义
             std::string columnsStr;
             std::getline(iss,columnsStr);
@@ -53,7 +53,7 @@ void ComamandParser::parseCreateTable(Database& db,
                 std::cout << "Error: Invalid CREATE TABLE syntax. Use: CREATE TABLE name (col1 type, col2 type, ...)\n";
                 return;
             }
-            std::string columnsPart = columnsStr.substr(start + 1,end-start-1)；
+            std::string columnsPart = columnsStr.substr(start + 1,end-start-1);
             std::vector<std::pair<std::string, std::string>> columns;
             std::vector<std::string> columnDefs =splitString(columnsPart,',');
             for (auto& def : columnDefs) {
@@ -63,7 +63,7 @@ void ComamandParser::parseCreateTable(Database& db,
                 if (spacePos != std::string::npos){
                     std::string colName = trim(colDef.substr(0,spacePos));
                     std::string colType = trim(colDef.substr(spacePos+1));
-                    columnns.emplace_back(colName,colType);
+                    columns.emplace_back(colName,colType);
                 }
             }
             db.createTable(tableName,columns);
@@ -114,9 +114,9 @@ void CommandParser::parseInsertInto(Database& db,std::istringstream& iss){
         Table* table = db.getTable(tableName);
         if (!table) return;
 
-        Row newROw;
+        Row newRow;
         for (const auto& val : values){
-            newRow.addvalue(val);
+            newRow.addValue(val);
         }
 
         table->insertRow(newRow);
@@ -126,7 +126,7 @@ void CommandParser::parseInsertInto(Database& db,std::istringstream& iss){
     }
 }
 
-void CommandParser::parseSelect(Database&db std::istringstream& iss){
+void CommandParser::parseSelect(Database&db ,std::istringstream& iss){
     //简单处理：只支持 SELECT * FROM tableName
     std::string asterisk;
     iss>>asterisk;
@@ -154,7 +154,7 @@ void CommandParser::parseSelect(Database&db std::istringstream& iss){
     table->display();
 }
 
-std::vector<std::string> CommandParser::splitString(cosnt std::string& s,char delimiter){
+std::vector<std::string> CommandParser::splitString(const std::string& s,char delimiter){
     std::vector<std::string> tokens;
     std::string token;
     std::istringstream tokenStream(s);

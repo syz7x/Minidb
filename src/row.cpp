@@ -1,5 +1,5 @@
-#include "Row.h"
+#include "../include/minidb/Row.h"
 
-void addValue(const std::string& value){
+void Row::addValue(const std::string& value){
         values.push_back(value);
     }

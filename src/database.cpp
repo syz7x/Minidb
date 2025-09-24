@@ -1,3 +1,4 @@
+#include <filesystem>
 #include "../include/minidb/Database.h"
 
 void Database::createTable(const std::string& name,

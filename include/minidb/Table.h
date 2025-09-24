@@ -1,5 +1,10 @@
+#ifndef TABLE_H
+#define TABLE_H
+
 #include <string>
 #include <vector>
+#include <fstream>
+#include <sstream>
 #include "Row.h"
 #include "Column.h"
 
@@ -11,32 +16,16 @@ public:
 
     Table(const std::string& name):name(name){}
 
-    //添加列定义
-    void addColumn(const std::string& name,const std::string& type){
-        columns.emplace_back(name,type);
-    }
+    void addColumn(const std::string& name,const std::string& type);
+    void insertRow(const Row& row);
+    void display() const;
+    void saveToFile();
+    bool loadFromFile();
 
-    //插入一行数据
-    void insertRow(const Row& row){
-        if(row.values.size() != columns.size()){
-            std::cerr<<"Error: Row has"<<row.values.size()
-                     <<" Values,but table has "<<columns.size()<<" columns."<<std::endl;
-            return;
-        }
-        rows.push_back(row);
-    }
-
-    void display() const{
-        for(const auto& col : columns){
-            std::cout<<col.name<<"\t";
-        }
-        std::cout<<std::endl;
-
-        for (const auto& row : rows){
-            for (const auto& value : row.values){
-                std::cout<<value<<"\t";
-            }
-            std::cout<<std::endl;
-        }
-    }
+private:
+    void saveSchema();
+    void saveData();
+    bool loadSchema();
+    bool loadData();
 };
+#endif
