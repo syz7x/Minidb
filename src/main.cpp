@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
-#include "include\minidb\Database.h"
-#include "include\minidb\CommandParser.h"
+#include "../include/minidb/Database.h"
+#include "../include/minidb/CommandParser.h"
 
 int main(){
     Database db;

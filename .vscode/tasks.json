@@ -1,9 +1,9 @@
 {
     "tasks": [
         {
-            "type": "cppbuild",
+            "type": "shell",
             "label": "C/C++: g++.exe build active file",
-            "command": "D:\\edge\\msys64\\mingw64\\bin\\g++.exe",
+            "command": "D:\\mingw64\\bin\\g++.exe",
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",

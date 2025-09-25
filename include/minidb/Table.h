@@ -14,6 +14,7 @@ public:
     std::vector<Column> columns;
     std::vector<Row> rows;
 
+    Table() : name("") {}
     Table(const std::string& name):name(name){}
 
     void addColumn(const std::string& name,const std::string& type);
